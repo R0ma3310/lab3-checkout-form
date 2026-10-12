@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Concentric Dreams — сторінка альбому</title>
+  <style>
+    :root {
+      --bg: #12101f;
+      --panel: #1d1a33;
+      --accent: #ffc879;
+      --text: #ece9f7;
+      --muted: #9a95b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ===== CSS GRID: каркас сторінки (іменовані області) ===== */
+    .page {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      grid-template-rows: auto 1fr auto auto;
+      grid-template-areas:
+        "header header"
+        "cover  tracks"
+        "about  tracks"
+        "player player";
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 20px 0;
+      min-height: 100vh;
+    }
+    .site-header { grid-area: header; display: flex; align-items: center; gap: 14px; }
+    .cover       { grid-area: cover; }
+    .about       { grid-area: about; }
+    .tracks      { grid-area: tracks; }
+    .player      { grid-area: player; position: sticky; bottom: 0; }
+
+    .site-header h1 { font-size: 1.6rem; }
+    .site-header p  { color: var(--muted); }
+
+    .panel { background: var(--panel); border-radius: 14px; padding: 18px; }
+
+    /* ===== Зображення: srcset + sizes + WebP + lazy ===== */
+    .cover img {
+      width: 100%; height: auto; display: block;
+      border-radius: 12px;
+      transition: transform .4s ease, box-shadow .4s ease;
+    }
+    .cover img:hover {
+      transform: scale(1.04) rotate(-1deg);
+      box-shadow: 0 12px 40px rgba(255, 200, 121, .35);
+    }
+    .cover figcaption { color: var(--muted); font-size: .85rem; margin-top: 8px; }
+
+    /* ===== SVG-логотип + @keyframes ===== */
+    .logo { width: 56px; height: 56px; flex: none; }
+    .logo .ring { transform-origin: 50% 50%; animation: pulse 2.4s ease-in-out infinite; }
+    .logo .ring:nth-child(2) { animation-delay: .4s; }
+    .logo .ring:nth-child(3) { animation-delay: .8s; }
+    @keyframes pulse {
+      0%, 100% { transform: scale(.7); opacity: .4; }
+      50%      { transform: scale(1);  opacity: 1; }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .panel, .cover { animation: fade-in .8s ease both; }
+    .about  { animation-delay: .15s; }
+    .tracks { animation-delay: .3s; }
+
+    /* ===== Таблиця ===== */
+    table { width: 100%; border-collapse: collapse; }
+    caption { text-align: left; font-weight: 700; font-size: 1.1rem; padding-bottom: 10px; }
+    th, td { padding: 10px 12px; text-align: left; }
+    thead th { color: var(--muted); font-size: .8rem; text-transform: uppercase; border-bottom: 1px solid #3a355c; }
+    tbody tr { transition: background .25s, color .25s; cursor: pointer; }
+    tbody tr:hover, tbody tr.active { background: rgba(255, 200, 121, .14); color: var(--accent); }
+    tbody tr:focus-visible { outline: 2px solid var(--accent); }
+    td.num, th.num { width: 3em; text-align: right; }
+    td.time, th.time { text-align: right; font-variant-numeric: tabular-nums; }
+    tfoot td { color: var(--muted); border-top: 1px solid #3a355c; font-size: .9rem; }
+
+    /* ===== Кнопка + аудіоплеєр ===== */
+    .player { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 16px; }
+    .player audio { width: 100%; }
+    .now { font-weight: 600; white-space: nowrap; }
+    .btn {
+      display: inline-block; margin-top: 12px; padding: 10px 18px;
+      background: var(--accent); color: #1a1530; border: 0; border-radius: 999px;
+      font-weight: 700; cursor: pointer;
+      transition: background .25s, transform .25s, color .25s;
+    }
+    .btn:hover { background: #fff; transform: translateY(-2px) scale(1.05); }
+
+    /* ===== Адаптивність: інша сітка на вузьких екранах ===== */
+    @media (max-width: 800px) {
+      .page {
+        grid-template-columns: 1fr;
+        grid-template-areas: "header" "cover" "about" "tracks" "player";
+      }
+      .player { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="site-header">
+      <!-- Вбудований SVG-логотип (path / circle прямо в HTML) -->
+      <svg class="logo" viewBox="0 0 64 64" role="img" aria-labelledby="logo-title">
+        <title id="logo-title">Логотип Concentric Dreams</title>
+        <circle class="ring" cx="32" cy="32" r="28" fill="none" stroke="#ffc879" stroke-width="3"/>
+        <circle class="ring" cx="32" cy="32" r="19" fill="none" stroke="#ff9f6b" stroke-width="3"/>
+        <circle class="ring" cx="32" cy="32" r="10" fill="none" stroke="#c9a0ff" stroke-width="3"/>
+        <path d="M27 24 L42 32 L27 40 Z" fill="#ffc879"/>
+      </svg>
+      <div>
+        <h1>Concentric Dreams</h1>
+        <p>Ambient Collective · Новий альбом, 2026</p>
+      </div>
+    </header>
+
+    <figure class="cover">
+      <img
+        src="img/cover-800.webp"
+        srcset="img/cover-400.webp 400w, img/cover-800.webp 800w, img/cover-1200.webp 1200w"
+        sizes="(max-width: 800px) 90vw, 320px"
+        width="800" height="800"
+        loading="lazy"
+        alt="Обкладинка альбому: концентричні кільця від фіолетового до золотого кольору">
+      <figcaption>Обкладинка (WebP, srcset: 400w / 800w / 1200w)</figcaption>
+    </figure>
+
+    <section class="about panel" aria-labelledby="about-title">
+      <h2 id="about-title">Про альбом</h2>
+      <p>Чотири медитативні композиції, створені з простих синтезованих хвиль. Оберіть трек у таблиці або скористайтесь плеєром унизу сторінки.</p>
+      <button class="btn" type="button" id="play-first" aria-label="Увімкнути перший трек">▶ Слухати з початку</button>
+    </section>
+
+    <main class="tracks panel">
+      <table aria-describedby="tracks-note">
+        <caption>Трек-лист</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="num">№</th>
+            <th scope="col">Назва</th>
+            <th scope="col">Жанр</th>
+            <th scope="col" class="time">Тривалість</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr tabindex="0" data-src="audio/track1" data-title="Кільця світла">
+            <td class="num">1</td><td>Кільця світла</td><td>Ambient</td><td class="time">0:12</td>
+          </tr>
+          <tr tabindex="0" data-src="audio/track2" data-title="Тиха орбіта">
+            <td class="num">2</td><td>Тиха орбіта</td><td>Drone</td><td class="time">0:12</td>
+          </tr>
+          <tr tabindex="0" data-src="audio/track3" data-title="Глибока вода">
+            <td class="num">3</td><td>Глибока вода</td><td>Ambient</td><td class="time">0:12</td>
+          </tr>
+          <tr tabindex="0" data-src="audio/track4" data-title="Світанок">
+            <td class="num">4</td><td>Світанок</td><td>Chill</td><td class="time">0:12</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <!-- colspan: об'єднання клітинок -->
+            <td colspan="3">Загальна тривалість</td>
+            <td class="time">0:48</td>
+          </tr>
+        </tfoot>
+      </table>
+      <p id="tracks-note" style="color:var(--muted);font-size:.85rem;margin-top:10px">Клікніть рядок (або натисніть Enter), щоб відтворити трек.</p>
+    </main>
+
+    <footer class="player panel" aria-label="Глобальний аудіоплеєр">
+      <span class="now" id="now">Трек не обрано</span>
+      <audio id="audio" controls preload="none">
+        <source src="audio/track1.mp3" type="audio/mpeg">
+        <source src="audio/track1.ogg" type="audio/ogg">
+        Ваш браузер не підтримує елемент audio.
+      </audio>
+    </footer>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const now = document.getElementById('now');
+    const rows = document.querySelectorAll('tbody tr');
+
+    function play(row) {
+      rows.forEach(r => r.classList.remove('active'));
+      row.classList.add('active');
+      const base = row.dataset.src;
+      audio.innerHTML =
+        `<source src="${base}.mp3" type="audio/mpeg"><source src="${base}.ogg" type="audio/ogg">`;
+      audio.load();
+      audio.play().catch(() => {});
+      now.textContent = '♪ ' + row.dataset.title;
+    }
+    rows.forEach(r => {
+      r.addEventListener('click', () => play(r));
+      r.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(r); } });
+    });
+    document.getElementById('play-first').addEventListener('click', () => play(rows[0]));
+  </script>
+</body>
+</html>
