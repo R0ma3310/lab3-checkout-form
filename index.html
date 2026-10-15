@@ -4,8 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Concentric Dreams — сторінка альбому</title>
+
+  <!-- Google Fonts: основний шрифт Inter + Montserrat (допоміжні елементи) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
   <style>
+    /* Локальний акцентний шрифт для заголовків і логотипа (папка fonts/) */
+    @font-face {
+      font-family: 'Lora Local';
+      src: url('fonts/lora.woff') format('woff'),
+           url('fonts/lora.ttf') format('truetype');
+      font-weight: 400 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lora Local';
+      src: url('fonts/lora-italic.woff') format('woff');
+      font-weight: 400 700;
+      font-style: italic;
+      font-display: swap;
+    }
+
     :root {
+      --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --font-ui: 'Montserrat', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --font-heading: 'Lora Local', Georgia, 'Times New Roman', serif;
       --bg: #12101f;
       --panel: #1d1a33;
       --accent: #ffc879;
@@ -14,10 +39,33 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-family: var(--font-body);
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;            /* комфортна висота рядка 1.5–1.6 */
+    }
+    h1, h2, h3, .logo-text {
+      font-family: var(--font-heading);
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    /* Допоміжні елементи: навігація, кнопки, бейджі */
+    .nav a, .btn, .badge, thead th {
+      font-family: var(--font-ui);
+      text-transform: uppercase;
+      letter-spacing: 1px;         /* діапазон 0.5–1.5px */
+    }
+    .nav { display: flex; gap: 18px; margin-left: auto; }
+    .nav a {
+      color: var(--muted); text-decoration: none; font-size: .8rem; font-weight: 600;
+      padding: 6px 2px; border-bottom: 2px solid transparent;
+      transition: color .25s, border-color .25s;
+    }
+    .nav a:hover, .nav a:focus-visible { color: var(--accent); border-color: var(--accent); }
+    .badge {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      background: rgba(201, 160, 255, .18); color: #d9bcff;
+      font-size: .7rem; font-weight: 700; letter-spacing: 1.5px;
     }
 
     /* ===== CSS GRID: каркас сторінки (іменовані області) ===== */
@@ -42,7 +90,8 @@
     .tracks      { grid-area: tracks; }
     .player      { grid-area: player; position: sticky; bottom: 0; }
 
-    .site-header h1 { font-size: 1.6rem; }
+    .site-header h1 { font-size: 1.7rem; font-weight: 700; }
+    .about h2, caption { font-family: var(--font-heading); }
     .site-header p  { color: var(--muted); }
 
     .panel { background: var(--panel); border-radius: 14px; padding: 18px; }
@@ -80,7 +129,7 @@
     table { width: 100%; border-collapse: collapse; }
     caption { text-align: left; font-weight: 700; font-size: 1.1rem; padding-bottom: 10px; }
     th, td { padding: 10px 12px; text-align: left; }
-    thead th { color: var(--muted); font-size: .8rem; text-transform: uppercase; border-bottom: 1px solid #3a355c; }
+    thead th { color: var(--muted); font-size: .75rem; letter-spacing: .5px; border-bottom: 1px solid #3a355c; }
     tbody tr { transition: background .25s, color .25s; cursor: pointer; }
     tbody tr:hover, tbody tr.active { background: rgba(255, 200, 121, .14); color: var(--accent); }
     tbody tr:focus-visible { outline: 2px solid var(--accent); }
@@ -95,7 +144,7 @@
     .btn {
       display: inline-block; margin-top: 12px; padding: 10px 18px;
       background: var(--accent); color: #1a1530; border: 0; border-radius: 999px;
-      font-weight: 700; cursor: pointer;
+      font-weight: 700; font-size: .8rem; letter-spacing: 1px; cursor: pointer;
       transition: background .25s, transform .25s, color .25s;
     }
     .btn:hover { background: #fff; transform: translateY(-2px) scale(1.05); }
@@ -127,8 +176,13 @@
       </svg>
       <div>
         <h1>Concentric Dreams</h1>
-        <p>Ambient Collective · Новий альбом, 2026</p>
+        <p>Ambient Collective · Новий альбом, 2026 <span class="badge">Ambient</span> <span class="badge">New</span></p>
       </div>
+      <nav class="nav" aria-label="Головна навігація">
+        <a href="#about-title">Про альбом</a>
+        <a href="#tracks">Треки</a>
+        <a href="#player">Плеєр</a>
+      </nav>
     </header>
 
     <figure class="cover">
@@ -148,7 +202,7 @@
       <button class="btn" type="button" id="play-first" aria-label="Увімкнути перший трек">▶ Слухати з початку</button>
     </section>
 
-    <main class="tracks panel">
+    <main class="tracks panel" id="tracks">
       <table aria-describedby="tracks-note">
         <caption>Трек-лист</caption>
         <thead>
@@ -161,16 +215,16 @@
         </thead>
         <tbody>
           <tr tabindex="0" data-src="audio/track1" data-title="Кільця світла">
-            <td class="num">1</td><td>Кільця світла</td><td>Ambient</td><td class="time">0:12</td>
+            <td class="num">1</td><td>Кільця світла</td><td><span class="badge">Ambient</span></td><td class="time">0:12</td>
           </tr>
           <tr tabindex="0" data-src="audio/track2" data-title="Тиха орбіта">
-            <td class="num">2</td><td>Тиха орбіта</td><td>Drone</td><td class="time">0:12</td>
+            <td class="num">2</td><td>Тиха орбіта</td><td><span class="badge">Drone</span></td><td class="time">0:12</td>
           </tr>
           <tr tabindex="0" data-src="audio/track3" data-title="Глибока вода">
-            <td class="num">3</td><td>Глибока вода</td><td>Ambient</td><td class="time">0:12</td>
+            <td class="num">3</td><td>Глибока вода</td><td><span class="badge">Ambient</span></td><td class="time">0:12</td>
           </tr>
           <tr tabindex="0" data-src="audio/track4" data-title="Світанок">
-            <td class="num">4</td><td>Світанок</td><td>Chill</td><td class="time">0:12</td>
+            <td class="num">4</td><td>Світанок</td><td><span class="badge">Chill</span></td><td class="time">0:12</td>
           </tr>
         </tbody>
         <tfoot>
@@ -184,7 +238,7 @@
       <p id="tracks-note" style="color:var(--muted);font-size:.85rem;margin-top:10px">Клікніть рядок (або натисніть Enter), щоб відтворити трек.</p>
     </main>
 
-    <footer class="player panel" aria-label="Глобальний аудіоплеєр">
+    <footer class="player panel" id="player" aria-label="Глобальний аудіоплеєр">
       <span class="now" id="now">Трек не обрано</span>
       <audio id="audio" controls preload="none">
         <source src="audio/track1.mp3" type="audio/mpeg">
